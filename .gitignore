@@ -1,0 +1,20 @@
+node_modules
+dist
+*.local
+.env*
+!.env.example
+test-results
+playwright-report
+.DS_Store
+.wrangler
+.dev.vars
+
+# Real data for local mock mode. Never commit.
+app/mock/*.local.md
+# One-off Notion importer: contains verbatim personal log lines. Local only.
+app/scripts/legacy.ts
+app/scripts/legacy.test.ts
+app/scripts/import-legacy.ts
+
+# Local dev notes and planning docs (spec, designs). Not published.
+.dev/
