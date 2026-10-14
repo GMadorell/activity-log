@@ -87,6 +87,8 @@ npm run e2e       # end-to-end (playwright, mocked GitHub)
 npm run typecheck && npm run lint && npm run format:check
 ```
 
+After cloning, enable the pre-commit privacy check: `git config core.hooksPath .githooks`. It runs `scripts/check-public.mjs`, which CI also runs.
+
 ## Deploy
 
 Live at https://gmadorell.github.io/activity-log/. Install it on Android with Chrome → ⋮ → **Add to Home screen**.

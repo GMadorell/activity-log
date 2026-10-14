@@ -2,13 +2,25 @@
 
 PWA (Vite + React 19 + TS strict) in `app/`, Cloudflare Worker for GitHub App token exchange in `auth/`. User-facing overview, file format and deploy: [README.md](README.md).
 
+## Secrets and personal data (read before any commit, push, screenshot or publish)
+
+This repo, its CI logs, the built site and the README screenshots are **public**. The owner's data is private.
+
+Never commit, publish, print in CI or paste into issues/PRs:
+- **Secrets:** GitHub App client secret or private keys (`.pem`), tokens (`gh*_`, `github_pat_`), `.env*`, `.dev.vars`, Cloudflare credentials. The client secret exists only as a Worker secret (`wrangler secret put`), entered by the owner, never passed through chat or files.
+- **Personal data:** real log entries or phrases from them, real places, injury/illness dates, names, email (commits use the GitHub noreply address), local paths, LAN IPs, account IDs.
+- **Real data sources:** the private data repo, `app/mock/*.local.md`, `.dev/`, the legacy importer (`app/scripts/legacy*.ts`, `import-legacy.ts`). All gitignored here.
+
+Use mock data instead: fixtures in `app/e2e/fake.ts` and tests use invented places ("Downtown", "Main Gym") and injuries; `app/mock/seed.md` is synthetic. Screenshots come from a clean clone with no `log.local.md`, and every image is checked before committing.
+
+Public by design (fine to commit): GitHub App client ID and slug, Worker URL, data repo name, Pages URL.
+
+Enforced by `scripts/check-public.mjs`, which runs in CI and as a pre-commit hook. After cloning, run `git config core.hooksPath .githooks`. It scans for secret patterns, emails, home paths and private IPs, plus owner-specific terms from the gitignored `.dev/private-terms.txt`; add new private terms there, never in the repo. If it flags something, remove the data. Don't weaken the check. Never rewrite history or force-push without asking.
+
 ## Rules
 
-- **Public repo. Never commit or publish the owner's personal data**: real log entries, real locations, injury/illness dates, local paths, email. Fixtures, seed and screenshots use mock data only. Scan the diff before committing.
-- Real data lives only in the private data repo and in gitignored local files (`app/mock/*.local.md`, `.dev/`, the legacy importer in `app/scripts/legacy*.ts`).
 - Bug fixes: write the failing test first (e2e > unit), confirm it fails, then fix.
 - Never break parsing of existing `log.md` files. Unparseable lines must survive as text. Format changes need round-trip tests in `app/src/format/format.test.ts`.
-- The client secret exists only as a Worker secret. Everything in the Pages build is public.
 
 ## Commands (in `app/`)
 
@@ -33,4 +45,4 @@ npm run build        # also runs scripts/check-build.mjs: fails if mock code/dat
 
 - Mock mode must be dead-code-eliminated: test `import.meta.env.VITE_MOCK === '1'` inline at each use site, never via a config object. `npm run build` enforces it.
 - `useEffect(() => el.scrollIntoView(...))` breaks in Chrome (it may return a Promise, which React calls as cleanup). Use a block body.
-- README screenshots: run `dev:mock` from a clean clone (no `log.local.md`, so only `mock/seed.md`), capture at 412×860 @2x, check every image for personal data before committing.
+- README screenshots: run `dev:mock` from a clean clone (no `log.local.md`, so only `mock/seed.md`), capture at 412×860 @2x, check every image for personal data before committing (see the secrets and personal data section above).
