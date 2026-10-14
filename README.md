@@ -87,9 +87,12 @@ npm run e2e       # end-to-end (playwright, mocked GitHub)
 npm run typecheck && npm run lint && npm run format:check
 ```
 
-## Deploy (not done yet)
+## Deploy
 
-1. Private data repo with `log.md`, plus a public repo for this code (GitHub Pages).
-2. A GitHub App with `Contents: read & write`, installed only on the data repo, and "Expire user authorization tokens" on.
-3. `cd auth && npx wrangler deploy`, then `npx wrangler secret put GITHUB_CLIENT_SECRET`.
-4. Repo variables for the Pages build: `GH_APP_CLIENT_ID`, `GH_APP_SLUG`, `AUTH_URL`, `DATA_REPO`.
+Live at https://gmadorell.github.io/activity-log/. Install it on Android with Chrome → ⋮ → **Add to Home screen**.
+
+- **App:** every push to `main` runs CI; when CI passes, `deploy.yml` builds and publishes to GitHub Pages. Build config comes from repo *variables* (all public by design): `GH_APP_CLIENT_ID`, `GH_APP_SLUG`, `AUTH_URL`, `DATA_REPO`. Deploy skips itself while `AUTH_URL` is unset.
+- **Worker:** `cd auth && npx wrangler deploy` (not automated). The client secret is set only with `npx wrangler secret put GITHUB_CLIENT_SECRET`. `ALLOWED_ORIGINS` in `wrangler.toml` limits which sites may call it.
+- **GitHub App:** callback `https://gmadorell.github.io/activity-log/`, "Expire user authorization tokens" on, webhook off, `Contents: read & write`, installed only on the data repo. Its private keys are unused.
+
+Setting it up from scratch: create the private data repo with a `log.md`, create the GitHub App as above, deploy the Worker and put the secret, set the four repo variables, then enable Pages with "GitHub Actions" as the source.

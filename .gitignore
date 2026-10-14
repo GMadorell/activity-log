@@ -18,3 +18,4 @@ app/scripts/import-legacy.ts
 
 # Local dev notes and planning docs (spec, designs). Not published.
 .dev/
+CLAUDE.local.md
