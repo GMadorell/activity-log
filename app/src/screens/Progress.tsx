@@ -216,13 +216,7 @@ export function Progress({ name }: { name?: string }) {
           </select>
           <div className="chips">
             {names.slice(0, 6).map((n) => (
-              <a
-                key={n}
-                className="chip"
-                href={href('progress', n)}
-                aria-pressed={n === selected}
-                style={{ display: 'inline-flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}
-              >
+              <a key={n} className="chip" href={href('progress', n)} aria-current={n === selected}>
                 {n}
               </a>
             ))}

@@ -281,6 +281,10 @@ test('progress chart renders for an exercise', async ({ signedIn: page }) => {
   await expect(page.getByRole('heading', { name: /Pull-up/ })).toBeVisible()
   await page.getByLabel('Exercise').selectOption('Barbell Squat')
   await expect(page.getByText('Only one session so far.')).toBeVisible()
+  // Selected chip: marked current, dark ink on the lime accent (readable).
+  const chip = page.locator('.chips').getByRole('link', { name: 'Barbell Squat' })
+  await expect(chip).toHaveAttribute('aria-current', 'true')
+  await expect(chip).toHaveCSS('color', 'rgb(12, 13, 14)')
 })
 
 test('theme can be forced to dark or light', async ({ signedIn: page }) => {

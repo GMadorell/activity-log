@@ -376,7 +376,8 @@ select:focus-visible,
   text-decoration: none;
   color: var(--text-primary);
 }
-.chip[aria-pressed='true'] {
+.chip[aria-pressed='true'],
+.chip[aria-current='true'] {
   background: var(--accent);
   border-color: var(--accent-edge);
   color: var(--accent-ink);
