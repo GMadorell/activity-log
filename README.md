@@ -22,6 +22,43 @@ Screenshots use mock data (`app/mock/seed.md`).
 
 ## How it works
 
+```mermaid
+flowchart LR
+  subgraph device["Phone / laptop"]
+    app["Activity Log PWA<br/>drafts, offline queue,<br/>tokens in localStorage"]
+  end
+
+  subgraph github["GitHub"]
+    pages["GitHub Pages<br/>static app"]
+    oauth["GitHub sign-in<br/>(GitHub App, PKCE)"]
+    api["Contents API"]
+    data[("Private data repo<br/>log.md")]
+    code["Public code repo"]
+    ci["GitHub Actions<br/>CI + deploy"]
+  end
+
+  subgraph cf["Cloudflare"]
+    worker["Auth Worker<br/>holds the client secret"]
+  end
+
+  pages -- "(1) load app" --> app
+  app -- "(2) sign in" --> oauth
+  oauth -- "one-time code" --> app
+  app -- "(3) code + PKCE verifier" --> worker
+  worker -- "exchange / refresh" --> oauth
+  worker -- "access + refresh token" --> app
+  app -- "(4) read / commit log.md<br/>(user token, this repo only)" --> api
+  api --> data
+  code -- "push" --> ci
+  ci -- "build + publish" --> pages
+```
+
+1. The app is a static PWA served by GitHub Pages; once installed it runs offline.
+2. Sign-in goes to GitHub, which returns a one-time code.
+3. The Worker swaps the code for tokens. It's the only place the client secret lives, and it only answers the app's own origin.
+4. From then on the app talks to GitHub directly. Tokens can only reach the one repo the GitHub App is installed on.
+
+
 - Data lives in `log.md` in a private repo, read and written through the GitHub Contents API. Sessions are drafted on the device (they survive reloads and no signal) and committed on Finish. Offline saves queue and retry; conflicts with edits made elsewhere are merged by replaying the change on the latest file.
 - Sign-in is a GitHub App installed only on the data repo with `Contents: read & write`, so tokens can't touch any other repo. Authorization code + PKCE; access tokens last 8h and refresh silently (refresh tokens last 6 months and rotate).
 - The client secret lives only in the Worker's secrets. The client ID is public by design. The app loads no third-party scripts and ships a strict CSP.
