@@ -2,6 +2,21 @@
 
 Installable web app (PWA) for logging gym sessions and other activities. The data is one markdown file, `log.md`, in a private GitHub repo. You can also edit it by hand.
 
+<table>
+  <tr>
+    <td><img src="docs/screenshots/home.png" width="200" alt="Home: start a workout or log an activity, with a yearly training calendar"></td>
+    <td><img src="docs/screenshots/start.png" width="200" alt="Start workout: pick a recent session to repeat"></td>
+    <td><img src="docs/screenshots/plan.png" width="200" alt="Plan: exercises and the selected exercise's sets, reps and load"></td>
+  </tr>
+  <tr>
+    <td><img src="docs/screenshots/workout.png" width="200" alt="Workout: rest stopwatch, sets done and a big Set done button"></td>
+    <td><img src="docs/screenshots/history.png" width="200" alt="History: calendar, filters and past sessions"></td>
+    <td><img src="docs/screenshots/progress.png" width="200" alt="Progress: top weight over time with injury periods shaded"></td>
+  </tr>
+</table>
+
+Screenshots use mock data (`app/mock/seed.md`).
+
 - `app/`: the PWA (Vite + React + TypeScript).
 - `auth/`: a Cloudflare Worker that exchanges GitHub App OAuth codes. It holds the client secret.
 
