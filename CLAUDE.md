@@ -45,4 +45,4 @@ npm run build        # also runs scripts/check-build.mjs: fails if mock code/dat
 
 - Mock mode must be dead-code-eliminated: test `import.meta.env.VITE_MOCK === '1'` inline at each use site, never via a config object. `npm run build` enforces it.
 - `useEffect(() => el.scrollIntoView(...))` breaks in Chrome (it may return a Promise, which React calls as cleanup). Use a block body.
-- README screenshots: run `dev:mock` from a clean clone (no `log.local.md`, so only `mock/seed.md`), capture at 412×860 @2x, check every image for personal data before committing (see the secrets and personal data section above).
+- README screenshots: run `dev:mock` from a clean clone (no `log.local.md`, so only `mock/seed.md`), capture in dark mode at 412×860 @2x, check every image for personal data before committing (see the secrets and personal data section above).
